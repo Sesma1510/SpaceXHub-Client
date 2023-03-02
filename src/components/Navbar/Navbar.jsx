@@ -1,7 +1,5 @@
 import "./Navbar.css";
-import { useContext } from "react";
-import { AuthContext } from "../../context/auth.context";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import { AppBar, Toolbar, Typography, Box, Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -17,7 +15,7 @@ const LogoutButton = styled(Button)({
 });
 
 function Navbar() {
-  const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
+  const { isLoggedIn, user, logOutUser } = useOutletContext();
 
   const pages = [
     {
@@ -28,7 +26,7 @@ function Navbar() {
     {
       path: "/profile",
       title: "Profile",
-      authRequired: false,
+      authRequired: true,
     },
   ];
 
@@ -50,7 +48,7 @@ function Navbar() {
   return (
     <>
       <AppBar position="static">
-        <Toolbar>
+        <Toolbar className="navBar">
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             SpaceX Hub
           </Typography>

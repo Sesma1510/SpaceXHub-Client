@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
-import authService from "../services/auth.service";
+import React, { useEffect, useState } from "react";
+import { Outlet } from "react-router-dom";
+import { CssBaseline } from "@mui/material";
 
-const AuthContext = React.createContext();
+import authService from "../../services/auth.service";
 
-function AuthProviderWrapper(props) {
+function Root() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
@@ -70,19 +71,20 @@ function AuthProviderWrapper(props) {
   }, []);
 
   return (
-    <AuthContext.Provider
-      value={{
-        isLoggedIn,
-        isLoading,
-        user,
-        storeToken,
-        authenticateUser,
-        logOutUser,
-      }}
-    >
-      {props.children}
-    </AuthContext.Provider>
+    <>
+      <CssBaseline />
+      <Outlet
+        context={{
+          isLoggedIn,
+          isLoading,
+          user,
+          storeToken,
+          authenticateUser,
+          logOutUser,
+        }}
+      />
+    </>
   );
 }
 
-export { AuthProviderWrapper, AuthContext };
+export default Root;

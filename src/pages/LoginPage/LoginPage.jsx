@@ -1,81 +1,107 @@
-import { useState, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/auth.context";
-import authService from "../../services/auth.service";
-import { TextField, Button, Typography } from "@mui/material";
 import "./LoginPage.css";
 
-function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState(undefined);
+import {
+  useActionData,
+  useNavigate,
+  useOutletContext,
+  Form,
+  Link,
+} from "react-router-dom";
 
+import { useEffect } from "react";
+
+import authService from "../../services/auth.service";
+
+import { TextField, Button, Typography, Container } from "@mui/material";
+
+export const loginPageAction = async ({ request }) => {
+  const formData = await request.formData();
+  const email = formData.get("email");
+  const password = formData.get("password");
+
+  try {
+    const { data } = await authService.login({ email, password });
+
+    return {
+      authToken: data.authToken,
+      error: null,
+    };
+  } catch (error) {
+    const {
+      request: { response },
+    } = error;
+    const { message } = JSON.parse(response);
+    return { error: message, authToken: null };
+  }
+};
+
+function LoginPage(a) {
   const navigate = useNavigate();
+  const actionData = useActionData();
 
-  const { storeToken, authenticateUser } = useContext(AuthContext);
+  const { storeToken, authenticateUser } = useOutletContext();
 
-  const handleEmailChange = (e) => setEmail(e.target.value);
-  const handlePasswordChange = (e) => setPassword(e.target.value);
+  const authToken = actionData?.authToken;
+  const error = actionData?.error;
 
-  const handleLoginSubmit = (e) => {
-    e.preventDefault();
-    const requestBody = { email, password };
-
-    authService
-      .login(requestBody)
-      .then((response) => {
-        storeToken(response.data.authToken);
-        authenticateUser();
-        navigate("/");
-      })
-      .catch((error) => {
-        const errorDescription = error.response.data.message;
-        setErrorMessage(errorDescription);
-      });
-  };
+  useEffect(() => {
+    // Si el token de autenticación existe, lo almacenamos en el localStorage,
+    // autenticamos al usuario y lo redirigimos a la página principal.
+    if (authToken) {
+      storeToken(authToken); // Almacenar el token en localStorage
+      authenticateUser(); // Autenticar al usuario
+      navigate("/"); // Redirigir al usuario a la página principal
+    }
+  }, [authToken, storeToken, authenticateUser, navigate]); // Dependencias del useEffect
 
   return (
-    <div className="LoginPage">
-      <Typography variant="h4">Login</Typography>
-
-      <form onSubmit={handleLoginSubmit}>
+    <Form action="/login" method="POST">
+      <Container maxWidth="sm" sx={{ mt: 8 }}>
+        <Typography variant="h4" align="center" gutterBottom>
+          Login
+        </Typography>
         <TextField
+          margin="normal"
+          required
+          fullWidth
           id="email"
           label="Email"
-          variant="outlined"
-          type="email"
-          fullWidth
-          value={email}
-          onChange={handleEmailChange}
-          margin="normal"
+          name="email"
+          autoComplete="email"
+          autoFocus
         />
-
         <TextField
-          id="password"
-          label="Password"
-          variant="outlined"
-          type="password"
-          fullWidth
-          value={password}
-          onChange={handlePasswordChange}
           margin="normal"
+          required
+          fullWidth
+          name="password"
+          label="Password"
+          type="password"
+          id="password"
+          autoComplete="current-password"
         />
-
-        <Button variant="contained" color="primary" type="submit">
-          Login
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          sx={{ mt: 3, mb: 2 }}
+        >
+          Sign In
         </Button>
-      </form>
-
-      {errorMessage && (
-        <Typography color="error" variant="subtitle1">
-          {errorMessage}
+        {error && (
+          <Typography variant="body2" color="error">
+            {error}
+          </Typography>
+        )}
+        <Typography variant="body2">
+          Don't have an account?{" "}
+          <Link component={Link} to={"/signup"}>
+            {" "}
+            Sign Up
+          </Link>
         </Typography>
-      )}
-
-      <Typography variant="subtitle1">
-        Don't have an account yet? <Link to={"/signup"}>Sign Up</Link>
-      </Typography>
-    </div>
+      </Container>
+    </Form>
   );
 }
 

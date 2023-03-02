@@ -1,10 +1,8 @@
-import { useContext } from "react";
-import { AuthContext } from "../../context/auth.context";
-import { Navigate } from "react-router-dom";
+import { Navigate, useOutletContext } from "react-router-dom";
 import Loading from "../Loading/Loading";
 
 function IsAnon({ children }) {
-  const { isLoggedIn, isLoading } = useContext(AuthContext);
+  const { isLoggedIn, isLoading } = useOutletContext();
 
   // If the authentication is still loading ⏳
   if (isLoading) {
