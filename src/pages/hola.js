@@ -1,16 +1,13 @@
 import { useState, useEffect } from "react";
 import LoadingState from "../components/LoadingState";
-import { Link, useOutletContext } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import Favorite from "../components/Favorite";
-import attachHoverListener from "../utils/hover";
+import { attachHoverListener } from "../utils/hover";
 
 export default function Launches() {
-  const { user } = useOutletContext();
-
   const [launches, setLaunches] = useState(null);
   const [isHovering, setIsHovering] = useState(false);
-  const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
     const getLaunches = async () => {
@@ -28,6 +25,7 @@ export default function Launches() {
 
   useEffect(() => {
     if (isHovering) {
+      console.log("hovering");
       attachHoverListener();
     } else {
       const cards = document.querySelectorAll(".card");
@@ -43,10 +41,12 @@ export default function Launches() {
   };
 
   const handleMouseEnter = () => {
+    console.log("hola");
     setIsHovering(true);
   };
 
   const handleMouseLeave = () => {
+    console.log("adios");
     setIsHovering(false);
   };
 
@@ -73,12 +73,7 @@ export default function Launches() {
                 >
                   <Link to={`/launches/${id}`} key={id}>
                     <article className="card rounded-lg p-5 flex flex-col">
-                      <Favorite
-                        launchId={id}
-                        isFavorite={favorites.includes(id)}
-                        setFavorites={setFavorites}
-                        userId={user.id}
-                      />
+                      <Favorite launchId={id} />
                       <img src={links.patch.large} alt={name} loading="lazy" />
                       <h2 className="text-white font-bold text-xl my-1">
                         {name}

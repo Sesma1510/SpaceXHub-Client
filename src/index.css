@@ -4,17 +4,116 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bg-color: rgba(20, 20, 20);
+  --card-color: rgba(23, 23, 23);
+}
+
 body {
   margin: 0;
+  height: 100vh;
   font-family: "Space Grotesk", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: url("./images/stars-background.jpg");
-  background-size: contain;
+  background-color: var(--bg-color);
 }
 
-img {
+.pages-showcase {
+  position: relative;
+}
+
+.card {
+  background-color: rgba(255, 255, 255, 0.02);
+  width: 100%;
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+}
+
+.card-content img {
   max-width: 100%;
+  max-height: 100%;
+}
+
+#cards:hover > .card > .card-border {
+  opacity: 1;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card::before {
+  background: radial-gradient(
+    800px circle at var(--mouse-x) var(--mouse-y),
+    rgba(255, 255, 255, 0.6),
+    transparent 40%
+  );
+  z-index: 3;
+}
+
+.card > .card-border {
+  background: radial-gradient(
+    800px circle at var(--mouse-x) var(--mouse-y),
+    rgba(255, 255, 255, 0.3),
+    transparent 40%
+  );
+  z-index: 1;
+}
+
+.card > .card-content {
+  background-color: var(--card-color);
+  border-radius: inherit;
+  height: calc(100% - 2px);
+  width: calc(100% - 2px);
+  position: relative;
+  margin: 1px;
+  z-index: 2;
+}
+
+.card-content {
+  background-color: var(--card-color);
+  border-radius: inherit;
+  height: calc(100% - 2px);
+  width: calc(100% - 2px);
+  position: relative;
+  margin: 1px;
+  z-index: 2;
+}
+
+.card::before,
+.card > .card-border {
+  background: radial-gradient(
+    800px circle at var(--mouse-x) var(--mouse-y),
+    rgba(255, 255, 255, 0.6),
+    transparent 40%
+  );
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  opacity: 0;
+  transition: opacity 500ms;
+  content: "";
+  border-radius: inherit;
+  z-index: 2;
+}
+
+@media (min-width: 768px) {
+  .card {
+    padding-bottom: 20%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card {
+    padding-bottom: 10%;
+  }
+}
+
+.max-width {
+  @apply px-5 lg:max-w-4xl lg:mx-auto xl:max-w-6xl 2xl:px-0;
 }
 
 .btn {
@@ -44,10 +143,6 @@ li {
 
 .loading-spinner p {
   @apply text-white opacity-75 mt-2 text-center;
-}
-
-.max-width {
-  @apply px-5 lg:max-w-4xl lg:mx-auto xl:max-w-6xl 2xl:px-0;
 }
 
 .showcase {
