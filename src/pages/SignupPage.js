@@ -11,6 +11,7 @@ export const signupPageAction = async ({ request }) => {
     await authService.signup({ email, password, name });
     return redirect("/login");
   } catch (error) {
+    console.log(error);
     const {
       request: { response },
     } = error;

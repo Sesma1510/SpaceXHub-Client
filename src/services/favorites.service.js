@@ -3,7 +3,9 @@ import axios from "axios";
 class FavoritesService {
   constructor() {
     this.api = axios.create({
-      baseURL: process.env.REACT_APP_SERVER_URL || "http://localhost:5005/api",
+      baseURL:
+        process.env.REACT_APP_SERVER_URL + "/api" ||
+        "http://localhost:5005/api",
     });
   }
 
