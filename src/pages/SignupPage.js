@@ -15,9 +15,13 @@ export const signupPageAction = async ({ request }) => {
     const {
       request: { response },
     } = error;
-    const { message } = JSON.parse(response);
-    return message;
-  }
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.indexOf("application/json") !== -1) {
+      const { message } = await response.json();
+      return message;
+    } else {
+      return "An unexpected error occurred. Please try again later.";
+    }
 };
 
 function SignupPage() {

@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/static/css/main.75ab4bd5.css",
+    "main.js": "/static/js/main.38fe696b.js",
+    "static/media/spacex-background.jpg": "/static/media/spacex-background.3efe7c503aa81ced8e34.jpg",
+    "static/media/logo.svg": "/static/media/logo.5b6feb135368bb81ba8e21a2c5aa2975.svg",
+    "index.html": "/index.html",
+    "main.75ab4bd5.css.map": "/static/css/main.75ab4bd5.css.map",
+    "main.38fe696b.js.map": "/static/js/main.38fe696b.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.75ab4bd5.css",
+    "static/js/main.38fe696b.js"
+  ]
+}
