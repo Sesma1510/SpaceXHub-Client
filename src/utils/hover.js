@@ -1,5 +1,4 @@
 export default function attachHoverListener() {
-  console.log("attachHoverListener called");
   const cardsEl = document.getElementById("cards");
   let animationFrameId;
 

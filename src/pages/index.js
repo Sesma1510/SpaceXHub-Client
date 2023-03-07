@@ -7,6 +7,7 @@ import SingleLaunches from "./SingleLaunches";
 import LoginPage from "./LoginPage";
 import SignupPage from "./SignupPage";
 import ProfilePage from "./ProfilePage";
+import FavoritePage from "./FavoritePage";
 
 export {
   Homepage,
@@ -18,4 +19,5 @@ export {
   LoginPage,
   SignupPage,
   ProfilePage,
+  FavoritePage,
 };

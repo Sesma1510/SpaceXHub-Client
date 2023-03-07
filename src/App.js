@@ -8,6 +8,9 @@ import {
 import React from "react";
 
 import Header from "./components/Header";
+import IsPrivate from "./components/IsPrivate";
+import IsAnon from "./components/IsAnon";
+
 import {
   Homepage,
   Crew,
@@ -18,13 +21,11 @@ import {
   LoginPage,
   SignupPage,
   ProfilePage,
+  FavoritePage,
 } from "./pages";
 
 import { loginPageAction } from "./pages/LoginPage";
 import { signupPageAction } from "./pages/SignupPage";
-
-import IsPrivate from "./components/IsPrivate";
-import IsAnon from "./components/IsAnon";
 
 import Root from "./pages/Root";
 
@@ -102,6 +103,15 @@ const router = createBrowserRouter(
           <IsPrivate>
             <Header />
             <ProfilePage />
+          </IsPrivate>
+        }
+      ></Route>
+      <Route
+        path="/favorites"
+        element={
+          <IsPrivate>
+            <Header />
+            <FavoritePage />
           </IsPrivate>
         }
       ></Route>

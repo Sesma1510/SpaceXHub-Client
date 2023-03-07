@@ -2,20 +2,16 @@ import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import LoadingState from "../components/LoadingState";
 import { format } from "date-fns";
-import axios from "axios";
+import launchesService from "../services/launches.service";
 
-// Get a placeholder image
-
-export default function SingleLaunches() {
+export default function SingleLaunch() {
   const [singleLaunch, setSingleLaunch] = useState(null);
   const { id } = useParams();
 
   useEffect(() => {
     const getSingleLaunch = async () => {
       try {
-        const response = await axios.get(
-          `https://api.spacexdata.com/v4/launches/${id}`
-        );
+        const response = await launchesService.getLaunchById(id);
         setSingleLaunch(response.data);
       } catch (error) {
         console.error(error);
@@ -32,7 +28,10 @@ export default function SingleLaunches() {
       ) : (
         <section className="max-width py-28 lg:pt-40 flex flex-col justify-center md:grid md:grid-cols-2 md:gap-10">
           <article>
-            <img src={singleLaunch.links.patch.large} alt={singleLaunch.name} />
+            <img
+              src={singleLaunch.links?.patch?.large}
+              alt={singleLaunch.name}
+            />
           </article>
 
           <article>
@@ -51,22 +50,24 @@ export default function SingleLaunches() {
               <p className="text-white opacity-75 text-sm lg:text-base mb-5">
                 {singleLaunch.details}
               </p>
-            ) : (
-              <p></p>
-            )}
+            ) : null}
 
             <ul className="text-white opacity-75">
               <li>
                 Fairings:{" "}
-                {singleLaunch.fairings
-                  ? `${singleLaunch.fairings.reused ? "Reused" : "Not Reused"}`
+                {singleLaunch.rocket?.first_stage?.cores[0]?.fairing
+                  ? `${
+                      singleLaunch.rocket.first_stage.cores[0].fairing?.reused
+                        ? "Reused"
+                        : "Not Reused"
+                    }`
                   : "No Fairings Used"}
               </li>
               <li>
                 Recovered:{" "}
-                {singleLaunch.fairings
+                {singleLaunch.rocket?.fairings
                   ? `${
-                      singleLaunch.fairings.recovered
+                      singleLaunch.rocket.fairings?.recovered
                         ? "Fairings Recovered"
                         : "Fairings Not Recovered"
                     }`
@@ -75,11 +76,13 @@ export default function SingleLaunches() {
             </ul>
 
             <ul className="mt-5 flex flex-wrap items-center justify-start">
-              <li className="mr-2 mb-2 md:mb-0">
-                <a href={singleLaunch.links.article} className="btn">
-                  Read Article
-                </a>
-              </li>
+              {singleLaunch.links?.article ? (
+                <li className="mr-2 mb-2 md:mb-0">
+                  <a href={singleLaunch.links.article} className="btn">
+                    Read Article
+                  </a>
+                </li>
+              ) : null}
             </ul>
 
             <article className="mt-5">
