@@ -26,6 +26,7 @@ import {
 
 import { loginPageAction } from "./pages/LoginPage";
 import { signupPageAction } from "./pages/SignupPage";
+import { launchesPageAction, launchesPagesLoader } from "./pages/Launches";
 
 import Root from "./pages/Root";
 
@@ -61,6 +62,8 @@ const router = createBrowserRouter(
       ></Route>
       <Route
         path="/launches"
+        loader={launchesPagesLoader}
+        action={launchesPageAction}
         element={
           <IsPrivate>
             <Header />

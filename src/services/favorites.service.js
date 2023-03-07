@@ -7,8 +7,9 @@ class FavoritesService {
     });
   }
 
-  addFavorite = (userId, launchId, isFavorite) => {
-    return this.api.post(`/favorites/${userId}`, { launchId, isFavorite });
+  addFavorite = (userId, launchId) => {
+    // remove isFavorite here
+    return this.api.post(`/favorites/${userId}`, { launchId });
   };
 
   removeFavorite = (userId, launchId) => {

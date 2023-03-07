@@ -24,6 +24,7 @@ function Root() {
         .then((response) => {
           // If the server verifies that JWT token is valid  ✅
           const user = response.data;
+          localStorage.setItem("userId", user._id);
           // Update state variables
           setIsLoggedIn(true);
           setIsLoading(false);
@@ -32,12 +33,14 @@ function Root() {
         .catch((error) => {
           // If the server sends an error response (invalid token) ❌
           // Update state variables
+          localStorage.removeItem("userId");
           setIsLoggedIn(false);
           setIsLoading(false);
           setUser(null);
         });
     } else {
       // If the token is not available
+      localStorage.removeItem("userId");
       setIsLoggedIn(false);
       setIsLoading(false);
       setUser(null);

@@ -1,35 +1,41 @@
 import { useState, useEffect } from "react";
 import LoadingState from "../components/LoadingState";
-import { Link, useOutletContext } from "react-router-dom";
+import { Link, redirect, useLoaderData, useSubmit } from "react-router-dom";
 import Favorite from "../components/Favorite";
 import attachHoverListener from "../utils/hover";
 import launchesService from "../services/launches.service";
 import favoritesService from "../services/favorites.service";
 
+export const launchesPagesLoader = async () => {
+  const { data: launches } = await launchesService.getLaunches();
+  const userId = localStorage.getItem("userId");
+  const { data: favorites } = await favoritesService.getFavorites(userId);
+
+  return { launches, favorites };
+};
+
+export const launchesPageAction = async ({ request }) => {
+  const formData = await request.formData();
+  const launchId = formData.get("launchId");
+  const isFavorite = formData.get("isFavorite") === "true";
+
+  const userId = localStorage.getItem("userId");
+  if (isFavorite) {
+    await favoritesService.removeFavorite(userId, launchId);
+  } else {
+    await favoritesService.addFavorite(userId, launchId);
+  }
+
+  return redirect("/launches");
+};
+
 export default function Launches() {
-  const { user } = useOutletContext();
+  const submit = useSubmit();
 
-  const [launches, setLaunches] = useState(null);
+  let { launches, favorites } = useLoaderData();
+  favorites = favorites?.map((fav) => fav.launch);
+
   const [isHovering, setIsHovering] = useState(false);
-  const [favorites, setFavorites] = useState([]);
-
-  useEffect(() => {
-    const fetchLaunches = async () => {
-      try {
-        const { data } = await launchesService.getLaunches();
-        const { data: favorites } = await favoritesService.getFavorites(
-          user._id
-        );
-        console.log(favorites);
-        setLaunches(data);
-        setFavorites(favorites.map((fav) => fav.launch));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchLaunches();
-  }, [user._id]);
 
   useEffect(() => {
     if (isHovering) {
@@ -56,36 +62,10 @@ export default function Launches() {
   };
 
   const toggleFavorite = async (launchId) => {
-    try {
-      if (favorites.includes(launchId)) {
-        // Remove launch from favorites
-        const response = await favoritesService.removeFavorite(
-          user._id,
-          launchId
-        );
-        if (response.status >= 200 && response.status < 300) {
-          setFavorites((favorites) =>
-            favorites.filter((fav) => fav !== launchId)
-          );
-        } else {
-          throw new Error(
-            `Failed to remove launch from favorites: ${response.statusText}`
-          );
-        }
-      } else {
-        // Add launch to favorites
-        const response = await favoritesService.addFavorite(user._id, launchId);
-        if (response.status >= 200 && response.status < 300) {
-          setFavorites((favorites) => [...favorites, launchId]);
-        } else {
-          throw new Error(
-            `Failed to add launch to favorites: ${response.statusText}`
-          );
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    submit(
+      { launchId, isFavorite: favorites.includes(launchId) },
+      { method: "POST", action: "/launches" }
+    );
   };
 
   return (
