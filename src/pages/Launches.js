@@ -81,7 +81,7 @@ export default function Launches() {
               className="max-width flex flex-col justify-between grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
               id="cards"
             >
-              {launches.map(({ _id, details, links, mission_name }) => (
+              {launches.map(({ _id, details, links, name }) => (
                 <div
                   key={_id}
                   className="launch-wrapper flex-grow"
@@ -96,13 +96,9 @@ export default function Launches() {
                   />
                   <Link to={`/launches/${_id}`} key={_id}>
                     <article className="card rounded-lg p-5 flex flex-col">
-                      <img
-                        src={links.patch.large}
-                        alt={mission_name}
-                        loading="lazy"
-                      />
+                      <img src={links.patch.large} alt={name} loading="lazy" />
                       <h2 className="text-white font-bold text-xl my-1">
-                        {mission_name}
+                        {name}
                       </h2>
                       {details ? (
                         <p className="text-white opacity-75 text-sm">{`${details.substring(
