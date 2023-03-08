@@ -3,9 +3,9 @@ import axios from "axios";
 class LaunchesService {
   constructor() {
     this.api = axios.create({
-      baseURL:
-        process.env.REACT_APP_SERVER_URL + "/api" ||
-        "http://localhost:5005/api",
+      baseURL: process.env.REACT_APP_SERVER_URL
+        ? `${process.env.REACT_APP_SERVER_URL}/api`
+        : "http://localhost:5005/api",
     });
   }
 
