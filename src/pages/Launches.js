@@ -5,6 +5,7 @@ import Favorite from "../components/Favorite";
 import attachHoverListener from "../utils/hover";
 import launchesService from "../services/launches.service";
 import favoritesService from "../services/favorites.service";
+import SearchBar from "../components/SearchBar";
 
 export const launchesPagesLoader = async () => {
   const { data: launches } = await launchesService.getLaunches();
@@ -30,6 +31,7 @@ export const launchesPageAction = async ({ request }) => {
 };
 
 export default function Launches() {
+  const [searchQuery, setSearchQuery] = useState("");
   const submit = useSubmit();
 
   let { launches, favorites } = useLoaderData();
@@ -48,6 +50,14 @@ export default function Launches() {
       });
     }
   }, [isHovering]);
+
+  const handleSearchQueryChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredLaunches = launches.filter((launch) =>
+    launch.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleLaunchClick = (event) => {
     event.stopPropagation();
@@ -76,12 +86,12 @@ export default function Launches() {
         <section className="pages-showcase">
           <div className="overlay py-20 lg:pt-32">
             <h1 className="heading">Launches</h1>
-
+            <SearchBar value={searchQuery} onChange={handleSearchQueryChange} />
             <div
               className="max-width flex flex-col justify-between grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
               id="cards"
             >
-              {launches.map(({ _id, details, links, name }) => (
+              {filteredLaunches.map(({ _id, details, links, name }) => (
                 <div
                   key={_id}
                   className="launch-wrapper flex-grow"
