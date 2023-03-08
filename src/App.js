@@ -7,7 +7,7 @@ import {
 
 import React from "react";
 
-import Header from "./components/Header";
+import SideBar from "./components/SideBar";
 import IsPrivate from "./components/IsPrivate";
 import IsAnon from "./components/IsAnon";
 
@@ -37,7 +37,6 @@ const router = createBrowserRouter(
         path="/"
         element={
           <>
-            <Header />
             <Homepage />
           </>
         }
@@ -46,7 +45,7 @@ const router = createBrowserRouter(
         path="/crew"
         element={
           <IsPrivate>
-            <Header />
+            <SideBar />
             <Crew />
           </IsPrivate>
         }
@@ -55,7 +54,7 @@ const router = createBrowserRouter(
         path="/crew/:id"
         element={
           <IsPrivate>
-            <Header />
+            <SideBar />
             <SingleCrew />
           </IsPrivate>
         }
@@ -66,7 +65,7 @@ const router = createBrowserRouter(
         action={launchesPageAction}
         element={
           <IsPrivate>
-            <Header />
+            <SideBar />
             <Launches />
           </IsPrivate>
         }
@@ -75,7 +74,7 @@ const router = createBrowserRouter(
         path="/launches/:id"
         element={
           <IsPrivate>
-            <Header />
+            <SideBar />
             <SingleLaunches />
           </IsPrivate>
         }
@@ -85,7 +84,7 @@ const router = createBrowserRouter(
         action={loginPageAction}
         element={
           <IsAnon>
-            <Header />
+            <SideBar />
             <LoginPage />
           </IsAnon>
         }
@@ -95,7 +94,7 @@ const router = createBrowserRouter(
         action={signupPageAction}
         element={
           <IsAnon>
-            <Header />
+            <SideBar />
             <SignupPage />
           </IsAnon>
         }
@@ -104,7 +103,7 @@ const router = createBrowserRouter(
         path="/profile"
         element={
           <IsPrivate>
-            <Header />
+            <SideBar />
             <ProfilePage />
           </IsPrivate>
         }
@@ -113,7 +112,7 @@ const router = createBrowserRouter(
         path="/favorites"
         element={
           <IsPrivate>
-            <Header />
+            <SideBar />
             <FavoritePage />
           </IsPrivate>
         }

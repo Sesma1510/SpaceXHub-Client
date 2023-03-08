@@ -15,8 +15,9 @@ const SearchBar = ({ value, onChange }) => {
           className="w-full px-4 py-2 pl-12 text-gray-900 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:shadow-outline-blue focus:border-blue-300"
           value={value}
           onChange={onChange}
+          style={{ position: "relative", zIndex: 1 }}
         />
-        <div className="absolute inset-y-0 right-0 flex items-center pr-4">
+        <div className="absolute inset-y-0 right-0 flex items-center pr-4 ml-4">
           <svg
             className="w-4 h-4 text-gray-500"
             fill="none"

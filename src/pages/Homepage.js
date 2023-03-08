@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Header from "../components/Header";
+import SideBar from "../components/SideBar";
 import LoadingState from "../components/LoadingState";
 import axios from "axios";
 
@@ -22,8 +22,8 @@ export default function Homepage() {
 
   return (
     <>
-      <Header />
       <section className="showcase">
+        <SideBar />
         <div className="overlay px-5">
           <h1 className="heading">
             SpaceX Hub{" "}

@@ -86,9 +86,14 @@ export default function Launches() {
         <section className="pages-showcase">
           <div className="overlay py-20 lg:pt-32">
             <h1 className="heading">Launches</h1>
-            <SearchBar value={searchQuery} onChange={handleSearchQueryChange} />
+            <div className="w-full lg:max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+              <SearchBar
+                value={searchQuery}
+                onChange={handleSearchQueryChange}
+              />
+            </div>
             <div
-              className="max-width flex flex-col justify-between grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
+              className="max-width mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
               id="cards"
             >
               {filteredLaunches.map(({ _id, details, links, name }) => (
@@ -111,10 +116,9 @@ export default function Launches() {
                         {name}
                       </h2>
                       {details ? (
-                        <p className="text-white opacity-75 text-sm">{`${details.substring(
-                          0,
-                          50
-                        )}...`}</p>
+                        <p className="text-white opacity-75 text-sm">
+                          {`${details.substring(0, 50)}...`}
+                        </p>
                       ) : (
                         <p></p>
                       )}
