@@ -10,9 +10,6 @@ module.exports = {
         brown: "rgb(30,30,17);",
       },
     },
-    backgroundImage: {
-      back: "url(./assets/background.svg)",
-    },
   },
 
   plugins: [],

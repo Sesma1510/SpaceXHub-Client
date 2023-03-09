@@ -1,5 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import user from "../assets/user.png";
+
 const UserProfile = ({ toggle }) => {
   return (
     <div
@@ -9,13 +11,15 @@ const UserProfile = ({ toggle }) => {
           : "bg-white rounded-xl p-2"
       }`}
     >
-      <div className="min-w-[3.5rem] h-[3.5rem]">
-        <img
-          src={user}
-          alt=""
-          className="w-full h-full rounded-full object-cover"
-        />
-      </div>
+      <Link to="/profile">
+        <div className="min-w-[3.5rem] h-[3.5rem]">
+          <img
+            src={user}
+            alt=""
+            className="w-full h-full rounded-full object-cover"
+          />
+        </div>
+      </Link>
       <div className={toggle ? "opacity-0 delay-200" : ""}>
         <h3 className="text-xl">Sesma</h3>
         <span className="text-[0.75rem] opacity-60">sesma@gmail.com</span>

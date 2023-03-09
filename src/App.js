@@ -7,6 +7,8 @@ import {
 
 import React from "react";
 
+import { CloudinaryContext } from "cloudinary-react";
+
 import SideBar from "./components/SideBar";
 import IsPrivate from "./components/IsPrivate";
 import IsAnon from "./components/IsAnon";
@@ -104,7 +106,13 @@ const router = createBrowserRouter(
         element={
           <IsPrivate>
             <SideBar />
-            <ProfilePage />
+            <CloudinaryContext
+              cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
+              apiKey={process.env.REACT_APP_CLOUDINARY_API_KEY}
+              apiSecret={process.env.REACT_APP_CLOUDINARY_API_SECRET}
+            >
+              <ProfilePage />
+            </CloudinaryContext>
           </IsPrivate>
         }
       ></Route>

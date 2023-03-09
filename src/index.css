@@ -32,6 +32,68 @@
   }
 }
 
+@layer profile {
+  @font-face {
+    font-family: "Poppins";
+    src: url(./fonts/Poppins-Medium.ttf);
+  }
+
+  * {
+    padding: 0;
+    left: 0;
+    box-sizing: border-box;
+    font-family: "Poppins";
+  }
+
+  .profile-container {
+    z-index: 10;
+    --profile-width: 30rem;
+    @apply rounded-lg shadow-lg p-5 my-10 w-full md:w-[30rem] items-center justify-center border-solid border-glass bg-glass;
+  }
+
+  .profile-image-wrapper {
+    @apply w-20 h-20 mb-3 rounded-full overflow-hidden;
+    height: 0;
+    padding-bottom: 100%; /* Set the aspect ratio of the image to 1:1 */
+  }
+
+  .profile-image {
+    @apply absolute inset-0 w-1 h-11 rounded-full;
+  }
+
+  .select-image-button {
+    @apply absolute bottom-0 right-0 bg-blue-500 text-white rounded-full px-2 py-1 text-sm hover:bg-blue-600;
+  }
+
+  .name-container {
+    @apply flex flex-col items-center mb-5;
+  }
+
+  .name {
+    @apply text-2xl font-bold mb-1;
+  }
+
+  .edit-name-button {
+    @apply text-blue-500 hover:text-blue-600;
+  }
+
+  .password-change-form {
+    @apply mb-5;
+  }
+
+  .password-change-label {
+    @apply block text-gray-700 mb-1;
+  }
+
+  .password-change-input {
+    @apply border border-gray-400 rounded-lg py-2 px-3 w-full mb-2;
+  }
+
+  .password-change-button {
+    @apply bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600;
+  }
+}
+
 input#search {
   z-index: 10;
   position: relative;
