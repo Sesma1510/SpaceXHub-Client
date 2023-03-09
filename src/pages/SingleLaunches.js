@@ -86,7 +86,10 @@ export default function SingleLaunch() {
             </ul>
 
             <article className="mt-5">
-              <a href={singleLaunch.links.webcast} className="btn">
+              <a
+                href={singleLaunch.links.webcast}
+                className="btn mb-8  py-2 px-4 rounded-full border border-solid border-gray-300 text-white font-semibold text-sm transition-colors duration-300 ease-in-out hover:bg-gray-800 hover:text-white"
+              >
                 Watch Launch on YouTube
               </a>
             </article>

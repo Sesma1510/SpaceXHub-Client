@@ -28,7 +28,7 @@ export default function Crew() {
           <div className="overlay py-20 lg:pt-32">
             <h1 className="heading">Crew</h1>
 
-            <div className="max-width grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="max-width grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
               {crew.map(({ name, image, id }) => (
                 <Link to={`/crew/${id}`} key={id}>
                   <article className="relative">

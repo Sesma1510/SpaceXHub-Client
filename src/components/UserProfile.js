@@ -14,6 +14,11 @@ const UserProfile = ({ toggle }) => {
     }
   }, [userImage]);
 
+  // Add a check to make sure the user is logged in before accessing user object
+  if (!user) {
+    return null;
+  }
+
   return (
     <div
       className={`flex gap-5 items-center ${

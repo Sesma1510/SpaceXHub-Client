@@ -50,7 +50,7 @@ function ProfilePage() {
   return (
     <>
       <div className="flex h-screen items-center justify-center">
-        <div className="bg-glass w-1/3 mt-10 rounded-lg">
+        <div className="w-1/3 h-1/2 bg-white bg-opacity-20 backdrop-blur-lg rounded drop-shadow-lg  mt-10 rounded-lg">
           <div className="flex items-center justify-center pt-10 flex-col">
             <div
               className="rounded-full w-32 h-32 bg-cover bg-center"

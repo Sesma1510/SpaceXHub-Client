@@ -53,7 +53,10 @@ export default function SingleCrew() {
 
               <ul className="flex items-center mt-5">
                 <li className="mr-5">
-                  <a href={singleCrew.wikipedia} className="btn">
+                  <a
+                    href={singleCrew.wikipedia}
+                    className="btn mb-8  py-2 px-4 rounded-full border border-solid border-gray-300 text-white font-semibold text-sm transition-colors duration-300 ease-in-out hover:bg-gray-800 hover:text-white"
+                  >
                     Wiki
                   </a>
                 </li>
