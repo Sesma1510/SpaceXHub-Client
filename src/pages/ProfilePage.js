@@ -1,12 +1,20 @@
 import { useOutletContext } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import userService from "../services/user.service";
 import userImage from "../assets/user.png";
 
 function ProfilePage() {
   const { user } = useOutletContext();
 
-  const [image, setImage] = useState(userImage);
+  const [image, setImage] = useState(
+    localStorage.getItem("userProfileImage") || userImage
+  );
+
+  useEffect(() => {
+    if (!localStorage.getItem("userProfileImage")) {
+      localStorage.setItem("userProfileImage", userImage);
+    }
+  }, []);
 
   const handleImage = async (e) => {
     const file = e.target.files[0];
@@ -14,10 +22,12 @@ function ProfilePage() {
     try {
       const base64Image = await getBase64Image(file);
       const response = await userService.updateUserProfileImage(
-        user?._id,
+        user._id,
         base64Image
       );
-      setImage(response?.data?.data?.profile?.image?.url || userImage);
+      const newImageUrl = response.data.data.profile.image.url;
+      setImage(newImageUrl);
+      localStorage.setItem("userProfileImage", newImageUrl);
       console.log("Profile image updated successfully");
     } catch (error) {
       console.error(error);
