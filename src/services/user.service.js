@@ -8,7 +8,7 @@ class UserService {
   }
 
   fetchUser = (userId) => {
-    return this.api.get(`user/${userId}`);
+    return this.api.get(`/api/user/${userId}`);
   };
 
   updateUserProfileImage = (userId, imageBase64) => {
