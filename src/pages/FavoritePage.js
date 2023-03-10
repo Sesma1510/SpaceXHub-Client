@@ -1,9 +1,25 @@
 import { useEffect, useState } from "react";
+import { Link, redirect, useSubmit } from "react-router-dom";
+
 import LoadingState from "../components/LoadingState";
-import { Link } from "react-router-dom";
-import launchesService from "../services/launches.service";
-import userService from "../services/user.service";
+import SearchBar from "../components/SearchBar";
+import Favorite from "../components/Favorite";
+
 import attachHoverListener from "../utils/hover";
+
+import userService from "../services/user.service";
+import favoritesService from "../services/favorites.service";
+
+export const favoritesPageAction = async ({ request }) => {
+  const formData = await request.formData();
+  const launchId = formData.get("launchId");
+
+  const userId = localStorage.getItem("userId");
+
+  await favoritesService.removeFavorite(userId, launchId);
+
+  return redirect("/favorites");
+};
 
 export default function Favorites() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -11,21 +27,24 @@ export default function Favorites() {
   const [launches, setLaunches] = useState([]);
   const [isHovering, setIsHovering] = useState(false);
 
+  const submit = useSubmit();
+
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
-
     const fetchData = async () => {
-      const userResponse = await userService.fetchUser(userId);
+      const userId = localStorage.getItem("userId");
 
+      const userResponse = await userService.fetchUser(userId);
       const favorites = userResponse.data.favorites;
-      console.log(favorites);
 
       setFavorites(favorites);
-      setLaunches(launches);
+
+      const favoriteLaunches = favorites.map((favorite) => favorite.launch);
+
+      setLaunches(favoriteLaunches);
     };
 
     fetchData();
-  }, []);
+  }, [favorites]);
 
   useEffect(() => {
     if (isHovering) {
@@ -55,6 +74,20 @@ export default function Favorites() {
     launch.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const removeFav = async (launchId) => {
+    submit(
+      { launchId, isFavorite: favorites.includes(launchId) },
+      { method: "POST", action: "/favorites" }
+    );
+  };
+
+  const toggleFavorite = async (launchId) => {
+    submit(
+      { launchId, isFavorite: favorites.includes(launchId) },
+      { method: "POST", action: "/favorites" }
+    );
+  };
+
   return (
     <>
       {!launches ? (
@@ -64,12 +97,9 @@ export default function Favorites() {
           <div className="overlay py-20 lg:pt-32">
             <h1 className="heading">Favorites</h1>
             <div className="w-full lg:max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-              <input
-                type="text"
-                placeholder="Search by launch name"
+              <SearchBar
                 value={searchQuery}
                 onChange={handleSearchQueryChange}
-                className="w-full py-2 px-4 rounded-md border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
             </div>
             <div
@@ -83,6 +113,12 @@ export default function Favorites() {
                   onMouseEnter={handleMouseEnter}
                   onMouseLeave={handleMouseLeave}
                 >
+                  <Favorite
+                    launchId={launch._id}
+                    isFavorite={favorites.includes(launch._id)}
+                    toggleFavorite={toggleFavorite}
+                    removeFavorite={removeFav}
+                  />
                   <Link to={`/launches/${launch._id}`} key={launch._id}>
                     <article className="card rounded-lg p-5 flex flex-col">
                       <img
@@ -94,7 +130,10 @@ export default function Favorites() {
                         {launch.name}
                       </h2>
                       <p className="text-gray-400 mb-3">{launch.date_utc}</p>
-                      <div className="flex-grow flex justify-end">
+                      <div className="flex-grow flex flex-col justify-end">
+                        <p className="text-white opacity-75 text-sm">
+                          {launch.details}
+                        </p>
                         <span className="text-green-500 font-semibold text-xl">
                           {launch.success ? "Success" : "Failure"}
                         </span>

@@ -96,36 +96,46 @@ export default function Launches() {
               className="max-width mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
               id="cards"
             >
-              {filteredLaunches.map(({ _id, details, links, name }) => (
-                <div
-                  key={_id}
-                  className="launch-wrapper flex-grow"
-                  onClick={handleLaunchClick}
-                  onMouseEnter={handleMouseEnter}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  <Favorite
-                    launchId={_id}
-                    isFavorite={favorites.includes(_id)}
-                    toggleFavorite={toggleFavorite}
-                  />
-                  <Link to={`/launches/${_id}`} key={_id}>
-                    <article className="card rounded-lg p-5 flex flex-col">
-                      <img src={links.patch.large} alt={name} loading="lazy" />
-                      <h2 className="text-white font-bold text-xl my-1">
-                        {name}
-                      </h2>
-                      {details ? (
-                        <p className="text-white opacity-75 text-sm">
-                          {`${details.substring(0, 50)}...`}
-                        </p>
-                      ) : (
-                        <p></p>
-                      )}
-                    </article>
-                  </Link>
-                </div>
-              ))}
+              {filteredLaunches.map(
+                ({ _id, details, links, name, success, date_utc }) => (
+                  <div
+                    key={_id}
+                    className="launch-wrapper flex-grow flex-col"
+                    onClick={handleLaunchClick}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                  >
+                    <Favorite
+                      launchId={_id}
+                      isFavorite={favorites.includes(_id)}
+                      toggleFavorite={toggleFavorite}
+                    />
+                    <Link to={`/launches/${_id}`} key={_id}>
+                      <article className="card rounded-lg p-5 flex flex-col">
+                        <img
+                          src={links.patch.large}
+                          alt={name}
+                          loading="lazy"
+                        />
+                        <p className="text-gray-400 mb-3 mt-3">{date_utc}</p>
+                        <h2 className="text-white font-bold text-xl my-1">
+                          {name}
+                        </h2>
+                        {details ? (
+                          <p className="text-white opacity-75 text-sm">
+                            {`${details.substring(0, 50)}...`}
+                          </p>
+                        ) : (
+                          <p></p>
+                        )}
+                        <span className="text-green-500 font-semibold text-xl">
+                          {success ? "Success" : "Failure"}
+                        </span>
+                      </article>
+                    </Link>
+                  </div>
+                )
+              )}
             </div>
           </div>
         </section>

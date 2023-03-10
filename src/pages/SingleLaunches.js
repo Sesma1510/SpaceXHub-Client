@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import LoadingState from "../components/LoadingState";
 import { format } from "date-fns";
 import launchesService from "../services/launches.service";
@@ -20,6 +20,8 @@ export default function SingleLaunch() {
 
     getSingleLaunch();
   }, [id]);
+
+  const boingsito = useNavigate();
 
   return (
     <>
@@ -94,8 +96,8 @@ export default function SingleLaunch() {
               </a>
             </article>
 
-            <button className="text-white mt-5">
-              <Link to="/launches">&larr; Back</Link>
+            <button className="text-white mt-5" onClick={() => boingsito(-1)}>
+              Back
             </button>
           </article>
         </section>
