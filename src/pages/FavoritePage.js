@@ -1,46 +1,31 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import LoadingState from "../components/LoadingState";
-import { Link, useLoaderData, useSubmit, redirect } from "react-router-dom";
-import attachHoverListener from "../utils/hover";
-import Favorite from "../components/Favorite";
-import favoritesService from "../services/favorites.service";
+import { Link } from "react-router-dom";
 import launchesService from "../services/launches.service";
-
-export const favoritesPageLoader = async () => {
-  const userId = localStorage.getItem("userId");
-  const { data: favorites } = await favoritesService.getFavorites(userId);
-
-  const launchesIds = favorites.map((favorite) => favorite.launch);
-  const { data: launches } = await launchesService.getLaunchById(launchesIds);
-
-  return { favorites, launches };
-};
-
-export const favoritesPageAction = async ({ request, state }) => {
-  const formData = await request.formData();
-  const launchId = formData.get("launchId");
-  const isFavorite = formData.get("isFavorite") === "true";
-
-  const userId = localStorage.getItem("userId");
-  if (isFavorite) {
-    await favoritesService.removeFavorite(userId, launchId);
-    state.favorites = state.favorites.filter(
-      (favorite) => favorite.launch !== launchId
-    );
-  } else {
-    await favoritesService.addFavorite(userId, launchId);
-    state.favorites.push({ launch: launchId });
-  }
-
-  return redirect("/favorites");
-};
+import userService from "../services/user.service";
+import attachHoverListener from "../utils/hover";
 
 export default function Favorites() {
   const [searchQuery, setSearchQuery] = useState("");
-  const { favorites, launches } = useLoaderData();
-  const submit = useSubmit();
-
+  const [favorites, setFavorites] = useState([]);
+  const [launches, setLaunches] = useState([]);
   const [isHovering, setIsHovering] = useState(false);
+
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+
+    const fetchData = async () => {
+      const userResponse = await userService.fetchUser(userId);
+
+      const favorites = userResponse.data.favorites;
+      console.log(favorites);
+
+      setFavorites(favorites);
+      setLaunches(launches);
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (isHovering) {
@@ -66,23 +51,13 @@ export default function Favorites() {
     setIsHovering(false);
   };
 
-  const toggleFavorite = async (launchId) => {
-    submit(
-      {
-        launchId,
-        isFavorite: favorites.some((favorite) => favorite.launch === launchId),
-      },
-      { method: "POST", action: "/favorites/" + localStorage.getItem("userId") }
-    );
-  };
-
-  const filteredFavorites = favorites.filter((favorite) =>
-    launches.some((launch) => launch._id === favorite.launch)
+  const filteredLaunchesByName = launches.filter((launch) =>
+    launch.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <>
-      {!favorites ? (
+      {!launches ? (
         <LoadingState />
       ) : (
         <section className="pages-showcase">
@@ -101,53 +76,33 @@ export default function Favorites() {
               className="max-width mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
               id="cards"
             >
-              {filteredFavorites.map((favorite) => {
-                const launch = launches.find(
-                  (launch) => launch._id === favorite.launch
-                );
-
-                if (!launch) {
-                  return null;
-                }
-
-                const { _id, details, links, name } = launch;
-
-                return (
-                  <div
-                    key={_id}
-                    className="launch-wrapper flex-grow"
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    <Favorite
-                      launchId={_id}
-                      isFavorite={favorites.some(
-                        (favorite) => favorite.launch === _id
-                      )}
-                      toggleFavorite={toggleFavorite}
-                    />
-                    <Link to={`/launches/${_id}`} key={_id}>
-                      <article className="card rounded-lg p-5 flex flex-col">
-                        <img
-                          src={links.patch.large}
-                          alt={name}
-                          loading="lazy"
-                        />
-                        <h2 className="text-white font-bold text-xl my-1">
-                          {name}
-                        </h2>
-                        {details ? (
-                          <p className="text-white opacity-75 text-sm">
-                            {details.substring(0, 50)}...
-                          </p>
-                        ) : (
-                          <p></p>
-                        )}
-                      </article>
-                    </Link>
-                  </div>
-                );
-              })}
+              {filteredLaunchesByName.map((launch) => (
+                <div
+                  key={launch._id}
+                  className="launch-wrapper flex-grow"
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  <Link to={`/launches/${launch._id}`} key={launch._id}>
+                    <article className="card rounded-lg p-5 flex flex-col">
+                      <img
+                        src={launch.links.patch.large}
+                        alt={launch.name}
+                        loading="lazy"
+                      />
+                      <h2 className="text-white font-bold text-lg my-3">
+                        {launch.name}
+                      </h2>
+                      <p className="text-gray-400 mb-3">{launch.date_utc}</p>
+                      <div className="flex-grow flex justify-end">
+                        <span className="text-green-500 font-semibold text-xl">
+                          {launch.success ? "Success" : "Failure"}
+                        </span>
+                      </div>
+                    </article>
+                  </Link>
+                </div>
+              ))}
             </div>
           </div>
         </section>

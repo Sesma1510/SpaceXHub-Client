@@ -29,7 +29,7 @@ import {
 import { loginPageAction } from "./pages/LoginPage";
 import { signupPageAction } from "./pages/SignupPage";
 import { launchesPageAction, launchesPagesLoader } from "./pages/Launches";
-import { favoritesPageLoader, favoritesPageAction } from "./pages/FavoritePage";
+// import { favoritesPageLoader, favoritesPageAction } from "./pages/FavoritePage";
 
 import Root from "./pages/Root";
 
@@ -119,8 +119,8 @@ const router = createBrowserRouter(
       ></Route>
       <Route
         path="/favorites"
-        loader={favoritesPageLoader}
-        action={favoritesPageAction}
+        // loader={favoritesPageLoader}
+        // action={favoritesPageAction}
         element={
           <IsPrivate>
             <SideBar />

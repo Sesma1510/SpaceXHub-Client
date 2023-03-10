@@ -53,10 +53,13 @@ function ProfilePage() {
         <div className="w-1/3 h-1/2 bg-white bg-opacity-20 backdrop-blur-lg rounded drop-shadow-lg  mt-10 rounded-lg">
           <div className="flex items-center justify-center pt-10 flex-col">
             <div
-              className="rounded-full w-32 h-32 bg-cover bg-center"
+              className="rounded-full w-64 h-64 bg-cover bg-center"
               style={{ backgroundImage: `url(${image})` }}
             />
-            <label htmlFor="image-upload" className="cursor-pointer">
+            <label
+              htmlFor="image-upload"
+              className="cursor-pointer bg-gray-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded border border-glass mt-5"
+            >
               Upload new profile image
             </label>
             <input
@@ -66,11 +69,11 @@ function ProfilePage() {
               className="hidden"
               onChange={handleImage}
             />
+
             <h1 className="text-gray-800 font-semibold text-xl mt-5">
               {user.name}
             </h1>
-            <h1 className="text-gray-500 text-sm">Cholula, Puebla</h1>
-            <h1 className="text-gray-500 text-sm p-4 text-center">
+            <h1 className="text-white text-sm p-4 text-center">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua.
             </h1>
